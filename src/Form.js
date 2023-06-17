@@ -4,10 +4,13 @@ import "./ContributionGraph.css";
 export default function Form() {
   const [pages, setPages] = useState(null);
   const [title, setTitle] = useState(null);
+  const [image, setimage] = useState(null);
+  const [description, ]
 
   const handleTitle = (e) => {
     setTitle(e.target.value);
   };
+  
 
   const getInfo = async () => {
     try {
@@ -17,7 +20,7 @@ export default function Form() {
         // `https://www.googleapis.com/books/v1/volumes?q=Atomic%20Habits&key=AIzaSyDNv8j61r-wKvp1ry82CmjEco5Yj31gNVw`
       );
 
-      book = data["items"][0]["volumeInfo"];
+      const book = res.data.items[0].volumeInfo;
 
       const data = await res.json();
       const pageCount = data.items[0].volumeInfo.pageCount;
