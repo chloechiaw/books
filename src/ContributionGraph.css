@@ -1,0 +1,32 @@
+.graph {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-gap: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+}
+
+.y-axis {
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    grid-gap: 5px;
+    justify-self: end;
+}
+
+.y-label {
+    text-align: right;
+}
+
+.x-axis {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+
+
+
+/* .contribution-graph {
+    display: grid;
+    grid-template-columns: repeat(53, 1fr);
+    /* Adjust the number of columns as needed */
+    gap: 1px;
+    /* Adjust the gap size between cells as needed */
+/* } */ }

@@ -1,5 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .App {
   text-align: center;
+}
+
+.contribution-graph {
+  display: grid;
+  grid-template-columns: repeat(53, 1fr);
+  /* Adjust the number of columns as needed */
+  gap: 1px;
+  /* Adjust the gap size between cells as needed */
 }
 
 .App-logo {
@@ -36,3 +48,4 @@
     transform: rotate(360deg);
   }
 }
+
