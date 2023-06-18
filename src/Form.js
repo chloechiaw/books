@@ -5,12 +5,11 @@ export default function Form() {
   const [pages, setPages] = useState(null);
   const [title, setTitle] = useState(null);
   const [image, setimage] = useState(null);
-  const [description, ]
+  const [description, setDescription] = useState(null);
 
   const handleTitle = (e) => {
     setTitle(e.target.value);
   };
-  
 
   const getInfo = async () => {
     try {
@@ -20,11 +19,11 @@ export default function Form() {
         // `https://www.googleapis.com/books/v1/volumes?q=Atomic%20Habits&key=AIzaSyDNv8j61r-wKvp1ry82CmjEco5Yj31gNVw`
       );
 
-      const book = res.data.items[0].volumeInfo;
-
       const data = await res.json();
       const pageCount = data.items[0].volumeInfo.pageCount;
+      const descriptionText = data.items[0].volumeInfo.description;
       setPages(pageCount);
+      setDescription(descriptionText);
       console.log(data);
       console.log(data.items[0].volumeInfo.pageCount);
     } catch (err) {
@@ -51,6 +50,7 @@ export default function Form() {
           Button
         </button>
         <div>{pages} pages </div>
+        <div>{description}</div>
       </div>
     </div>
   );
