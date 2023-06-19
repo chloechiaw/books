@@ -13,67 +13,77 @@ const CommitGraph = () => {
     });
   };
 
-  const isCommitDate = (month, day) => {
-    const date = new Date();
-    const currentYear = date.getFullYear();
+  const isCommitDate = (date) => {
+    const currentYear = new Date().getFullYear();
     return commitData.some(
       (commitDate) =>
-        commitDate.getMonth() === month &&
-        commitDate.getDate() === day &&
+        commitDate.getDate() === date.getDate() &&
+        commitDate.getMonth() === date.getMonth() &&
         commitDate.getFullYear() === currentYear
     );
   };
 
-  const renderGrid = () => {
-    const date = new Date();
-    const currentMonth = date.getMonth();
-    const daysInMonth = new Date(
-      date.getFullYear(),
-      currentMonth + 1,
-      0
-    ).getDate();
+  const getMonthLabels = () => {
+    const months = [];
+    const currentMonth = new Date().getMonth();
 
-    const grids = [];
-    for (let day = 1; day <= daysInMonth; day++) {
-      const isMonday =
-        new Date(date.getFullYear(), currentMonth, day).getDay() === 1;
-      const isWednesday =
-        new Date(date.getFullYear(), currentMonth, day).getDay() === 3;
-      const isFriday =
-        new Date(date.getFullYear(), currentMonth, day).getDay() === 5;
-
-      grids.push(
+    for (let i = 0; i < 12; i++) {
+      const month = (currentMonth + i) % 12;
+      months.push(
         <div
-          key={day}
-          className={`grid-item ${
-            isMonday
-              ? "bg-red-500"
-              : isWednesday
-              ? "bg-blue-500"
-              : isFriday
-              ? "bg-green-500"
-              : "bg-gray-200"
-          } ${isCommitDate(currentMonth, day) ? "overlay-green" : ""}`}
-          onClick={() =>
-            handleCommit(new Date(date.getFullYear(), currentMonth, day))
-          }
+          className="month-label"
+          key={i}
+          style={{ flex: `${getMonthWidth(month)} 1 0` }}
         >
-          {isCommitDate(currentMonth, day) ? <span className="dot" /> : null}
+          {getMonthName(month)}
         </div>
       );
     }
 
-    return grids;
+    return months;
+  };
+
+  const getMonthWidth = (month) => {
+    const currentMonth = new Date().getMonth();
+    const totalDays = new Date(
+      new Date().getFullYear(),
+      month + 1,
+      0
+    ).getDate();
+    const pastDays = currentMonth === month ? new Date().getDate() : totalDays;
+    return `${(pastDays / totalDays) * 100}%`;
+  };
+
+  const getMonthName = (month) => {
+    return new Date(new Date().getFullYear(), month, 1).toLocaleString(
+      "default",
+      { month: "short" }
+    );
   };
 
   return (
     <div className="commit-graph">
       <div className="y-axis">
         <div className="day-of-week">Mon</div>
+        <div className="day-of-week"></div>
         <div className="day-of-week">Wed</div>
+        <div className="day-of-week"></div>
         <div className="day-of-week">Fri</div>
       </div>
-      <div className="grid-container">{renderGrid()}</div>
+      <div className="grid-container">
+        <div className="month-labels">{getMonthLabels()}</div>
+        <div className="grid">
+          {Array.from({ length: 7 * 52 }, (_, index) => (
+            <div
+              key={index}
+              className={`grid-item ${
+                isCommitDate(new Date()) ? "overlay-green" : ""
+              }`}
+              onClick={() => handleCommit(new Date())}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
