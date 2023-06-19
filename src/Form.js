@@ -7,6 +7,8 @@ export default function Form() {
   const [image, setimage] = useState(null);
   const [description, setDescription] = useState(null);
 
+  const currDate = new Date().toLocaleDateString();
+
   const handleTitle = (e) => {
     setTitle(e.target.value);
   };
@@ -33,14 +35,15 @@ export default function Form() {
 
   return (
     <div>
+      <div className="text-left"> Current date: {currDate}</div>
       <div className="mt-2">
         <input
           onChange={handleTitle}
-          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          className="block w-24 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           placeholder=""
         />
         <input
-          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          className="block w-24 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           placeholder="How many pages did you read?"
         />
         <button
@@ -49,9 +52,11 @@ export default function Form() {
         >
           Button
         </button>
-        <div>{pages} pages </div>
+        <div>Total Pages: {pages}. </div>
         <div>{description}</div>
       </div>
     </div>
   );
 }
+
+// take the current date, align it with each of the boxes with the special box tha

@@ -1,94 +1,81 @@
-import React from "react";
+import React, { useState } from "react";
 import "./ContributionGraph.css";
 
-import "./ContributionGraph.css";
+const CommitGraph = () => {
+  const [commitData, setCommitData] = useState([]);
 
-const ContributionGraph = () => {
-  // Generate some dummy data for demonstration
-  const contributionData = [
-    [0, 0, 0, 1, 2, 3, 0],
-    [0, 0, 2, 3, 1, 0, 0],
-    [0, 0, 1, 1, 0, 2, 0],
-    [0, 1, 1, 0, 2, 1, 0],
-    [0, 0, 1, 0, 0, 1, 0],
-    [0, 0, 0, 1, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0],
-    // Add more data for other months...
-  ];
+  const handleCommit = (date) => {
+    // Update the commitData array with the clicked date
+    setCommitData((prevCommitData) => {
+      const updatedCommitData = [...prevCommitData];
+      updatedCommitData.push(date);
+      return updatedCommitData;
+    });
+  };
 
-  const renderBoxes = () => {
-    const daysOfWeek = ["Mon", "Wed", "Fri"];
-    const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
+  const isCommitDate = (month, day) => {
+    const date = new Date();
+    const currentYear = date.getFullYear();
+    return commitData.some(
+      (commitDate) =>
+        commitDate.getMonth() === month &&
+        commitDate.getDate() === day &&
+        commitDate.getFullYear() === currentYear
+    );
+  };
 
-    const boxes = [];
-    let dayIndex = 0;
+  const renderGrid = () => {
+    const date = new Date();
+    const currentMonth = date.getMonth();
+    const daysInMonth = new Date(
+      date.getFullYear(),
+      currentMonth + 1,
+      0
+    ).getDate();
 
-    for (let month = 0; month < contributionData.length; month++) {
-      for (let day = 0; day < contributionData[month].length; day++) {
-        const commits = contributionData[month][day];
+    const grids = [];
+    for (let day = 1; day <= daysInMonth; day++) {
+      const isMonday =
+        new Date(date.getFullYear(), currentMonth, day).getDay() === 1;
+      const isWednesday =
+        new Date(date.getFullYear(), currentMonth, day).getDay() === 3;
+      const isFriday =
+        new Date(date.getFullYear(), currentMonth, day).getDay() === 5;
 
-        const boxStyle = {
-          backgroundColor: commits > 0 ? "#216e39" : "#ebedf0",
-        };
-
-        boxes.push(
-          <div
-            key={`${month}-${day}`}
-            className={`box ${daysOfWeek[dayIndex % daysOfWeek.length]}`}
-            style={boxStyle}
-          ></div>
-        );
-
-        dayIndex++;
-      }
+      grids.push(
+        <div
+          key={day}
+          className={`grid-item ${
+            isMonday
+              ? "bg-red-500"
+              : isWednesday
+              ? "bg-blue-500"
+              : isFriday
+              ? "bg-green-500"
+              : "bg-gray-200"
+          } ${isCommitDate(currentMonth, day) ? "overlay-green" : ""}`}
+          onClick={() =>
+            handleCommit(new Date(date.getFullYear(), currentMonth, day))
+          }
+        >
+          {isCommitDate(currentMonth, day) ? <span className="dot" /> : null}
+        </div>
+      );
     }
 
-    return boxes;
+    return grids;
   };
 
   return (
-    <div className="graph">
+    <div className="commit-graph">
       <div className="y-axis">
-        <div className="y-label">Mon</div>
-        <div className="y-label">Wed</div>
-        <div className="y-label">Fri</div>
+        <div className="day-of-week">Mon</div>
+        <div className="day-of-week">Wed</div>
+        <div className="day-of-week">Fri</div>
       </div>
-      <div className="x-axis">
-        {[
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec",
-        ].map((month) => (
-          <div key={month} className="x-label">
-            {month}
-          </div>
-        ))}
-      </div>
-      <div className="boxes">{renderBoxes()}</div>
+      <div className="grid-container">{renderGrid()}</div>
     </div>
   );
 };
 
-export default ContributionGraph;
+export default CommitGraph;
